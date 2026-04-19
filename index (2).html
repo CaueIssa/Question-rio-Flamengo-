@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABSOLUT Sport — Questionário Operacional</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ab:#155f97;--ab-dk:#0e4a78;--ab-lt:#e8f2fa;--ab-pale:#f0f7fd;
+  --gold:#E7A841;--gold-lt:#fdf3e0;
+  --g1:#f7f7f5;--g2:#e8e8e2;--g4:#aaa;--g6:#5a5a56;--g8:#1a1a18;
+  --green:#1b5e20;--green-lt:#e8f5e9;--red:#D12820;
+  --radius:10px;
+}
+body{font-family:'Barlow',sans-serif;background:var(--g1);color:var(--g8);min-height:100vh;padding-bottom:90px}
+
+.progress-bar-wrap{background:white;border-bottom:1px solid var(--g2);padding:11px 1.5rem;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,0.05)}
+.progress-label{font-size:11px;font-weight:600;color:var(--g6);white-space:nowrap}
+.progress-track{flex:1;height:5px;background:var(--g2);border-radius:10px;overflow:hidden}
+.progress-fill{height:100%;background:var(--ab);border-radius:10px;transition:width .4s}
+.progress-pct{font-size:12px;font-weight:700;color:var(--ab);min-width:30px;text-align:right}
+
+.wrap{max-width:740px;margin:0 auto;padding:0 1rem}
+.page{display:none}.page.active{display:block}
+
+/* area-hero */
+.area-hero{background:var(--ab);border-radius:var(--radius);padding:1rem 1.25rem;margin:1.5rem 0 1rem;display:flex;align-items:center;gap:12px}
+.area-hero-icon{font-size:20px;width:42px;height:42px;background:rgba(255,255,255,0.15);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.area-hero-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:19px;color:white;line-height:1}
+.area-hero-sub{font-size:11px;color:rgba(255,255,255,0.7);margin-top:3px}
+
+/* intro card */
+.intro-card{background:white;border:0.5px solid var(--g2);border-left:4px solid var(--gold);border-radius:var(--radius);padding:1.25rem;margin:1.5rem 0 0.75rem}
+.intro-card h2{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;color:var(--g8);margin-bottom:7px}
+.intro-card p{font-size:12px;color:var(--g6);line-height:1.7}
+.intro-card p+p{margin-top:7px}
+.intro-card strong{color:var(--g8);font-weight:600}
+
+/* q-card */
+.q-card{background:white;border:0.5px solid var(--g2);border-radius:var(--radius);margin-bottom:10px;overflow:hidden;transition:box-shadow .15s}
+.q-card:focus-within{box-shadow:0 0 0 2px var(--ab);border-color:var(--ab)}
+.q-header{padding:13px 15px 0}
+.q-code{font-size:10px;font-weight:700;color:var(--ab);letter-spacing:.8px;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.q-code-badge{background:var(--ab-lt);padding:1px 7px;border-radius:20px}
+.q-req{color:var(--gold)}
+.q-label{font-size:13px;font-weight:600;color:var(--g8);line-height:1.45;margin-bottom:4px}
+.q-hint{font-size:11px;color:var(--g6);line-height:1.6;margin-bottom:9px;font-style:italic}
+.q-example{background:var(--ab-pale);border:0.5px solid #c5dff0;border-radius:7px;padding:9px 11px;margin-bottom:10px;font-size:11px;color:var(--ab-dk);line-height:1.6}
+.q-example strong{font-weight:600;color:var(--ab);display:block;margin-bottom:3px}
+.q-example ul{padding-left:12px}.q-example li{margin-bottom:2px}
+.q-body{padding:0 15px 13px}
+
+/* inputs */
+textarea,input[type=text],input[type=email],select{
+  width:100%;font-family:'Barlow',sans-serif;font-size:13px;color:var(--g8);
+  border:0.5px solid var(--g2);border-radius:7px;background:var(--g1);
+  padding:8px 10px;outline:none;transition:border-color .15s,background .15s;-webkit-appearance:none}
+textarea:focus,input:focus,select:focus{border-color:var(--ab);background:white}
+textarea{resize:vertical;min-height:80px;line-height:1.55}
+
+/* radio / check — SINGLE COL */
+.radio-group{display:flex;flex-direction:column;gap:5px}
+.radio-item{display:flex;align-items:flex-start;gap:8px;padding:7px 10px;border-radius:7px;border:0.5px solid var(--g2);background:var(--g1);cursor:pointer;font-size:12px;color:var(--g6);transition:all .15s}
+.radio-item:hover{background:var(--ab-lt);border-color:#b3d1ea;color:var(--g8)}
+.radio-item.sel{background:var(--ab-lt);border-color:var(--ab);color:var(--g8)}
+.radio-item input{margin-top:2px;flex-shrink:0;accent-color:var(--ab)}
+.radio-item label{cursor:pointer;line-height:1.4;flex:1}
+.radio-item label strong{display:block;font-weight:600;color:var(--g8);font-size:12px}
+
+/* check — GRID 2 COLS (Alt 7) */
+.check-group-2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.check-group-1{display:flex;flex-direction:column;gap:5px}
+.check-item{display:flex;align-items:flex-start;gap:8px;padding:7px 10px;border-radius:7px;border:0.5px solid var(--g2);background:var(--g1);cursor:pointer;font-size:12px;color:var(--g6);transition:all .15s}
+.check-item:hover{background:var(--ab-lt);border-color:#b3d1ea;color:var(--g8)}
+.check-item.sel{background:var(--ab-lt);border-color:var(--ab);color:var(--g8)}
+.check-item input{margin-top:2px;flex-shrink:0;accent-color:var(--ab)}
+.check-item label{cursor:pointer;line-height:1.3;flex:1}
+.check-item label strong{display:block;font-weight:600;color:var(--g8);font-size:12px}
+.check-item label span{font-size:10px;color:var(--g6)}
+
+/* area checkboxes for ID-01 */
+.areas-check-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+
+/* gestores block */
+.gestores-wrap{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.gestor-row{display:grid;grid-template-columns:1fr 180px auto;gap:6px;align-items:center}
+.gestor-row input{font-size:12px}
+.gestor-row select{font-size:12px}
+.btn-add-gestor{display:flex;align-items:center;gap:6px;background:white;border:0.5px dashed var(--ab);border-radius:7px;padding:6px 12px;font-size:11px;font-weight:600;color:var(--ab);cursor:pointer;width:100%;justify-content:center;font-family:'Barlow',sans-serif;transition:background .15s}
+.btn-add-gestor:hover{background:var(--ab-lt)}
+.btn-rm{background:none;border:none;color:var(--g4);cursor:pointer;font-size:15px;padding:2px 5px;border-radius:4px}
+.btn-rm:hover{color:var(--red)}
+
+/* task table (Alt 3: area col; Alt 5: substituto col) */
+.task-table{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:8px}
+.task-table th{background:var(--ab);color:white;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:7px 8px;text-align:left;border:0.5px solid rgba(255,255,255,.2)}
+.task-table td{padding:6px 8px;border:0.5px solid var(--g2);vertical-align:top}
+.task-table tr:nth-child(even) td{background:var(--g1)}
+.task-table tr:nth-child(odd) td{background:white}
+.task-code-cell{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;color:var(--ab);background:var(--ab-lt);border-radius:5px;padding:2px 6px;display:inline-block;white-space:nowrap}
+.task-table select,.task-table input{font-size:11px;padding:4px 6px;min-height:unset}
+.task-table textarea{min-height:46px;font-size:11px;padding:4px 6px}
+.btn-add-task{display:flex;align-items:center;gap:6px;background:white;border:0.5px dashed var(--ab);border-radius:7px;padding:7px 12px;font-size:12px;font-weight:600;color:var(--ab);cursor:pointer;width:100%;justify-content:center;font-family:'Barlow',sans-serif;transition:background .15s;margin-bottom:6px}
+.btn-add-task:hover{background:var(--ab-lt)}
+
+/* relation scale (Alt 4) */
+.rel-area-row{background:var(--g1);border:0.5px solid var(--g2);border-radius:8px;padding:10px 12px;margin-bottom:7px}
+.rel-area-name{font-size:12px;font-weight:600;color:var(--g8);margin-bottom:7px}
+.rel-scale{display:flex;gap:4px}
+.rel-scale-btn{flex:1;padding:5px 4px;text-align:center;font-size:10px;font-weight:600;border-radius:6px;border:1.5px solid var(--g2);background:white;cursor:pointer;color:var(--g6);transition:all .15s;line-height:1.3}
+.rel-scale-btn:hover{border-color:var(--ab);color:var(--ab)}
+.rel-scale-btn.active-1{background:#e8f5e9;border-color:#2e7d32;color:#2e7d32}
+.rel-scale-btn.active-2{background:#f1f8e9;border-color:#558b2f;color:#558b2f}
+.rel-scale-btn.active-3{background:var(--gold-lt);border-color:var(--gold);color:#6d4c00}
+.rel-scale-btn.active-4{background:#fff3e0;border-color:#e65100;color:#e65100}
+.rel-scale-btn.active-5{background:var(--ab-lt);border-color:var(--ab);color:var(--ab)}
+
+/* timing note */
+.timing-note{background:var(--ab-pale);border:0.5px solid #c5dff0;border-radius:8px;padding:9px 12px;margin-bottom:10px;font-size:11px;color:var(--ab-dk);line-height:1.6}
+.timing-note strong{font-weight:600;color:var(--ab)}
+
+/* task reference pills (Alt 9) */
+.task-refs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.task-ref-pill{background:var(--ab-lt);color:var(--ab);font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;cursor:pointer;border:1.5px solid transparent;transition:all .15s;font-family:'Barlow Condensed',sans-serif;letter-spacing:.3px}
+.task-ref-pill:hover{border-color:var(--ab)}
+.task-ref-pill.selected{background:var(--ab);color:white}
+.task-refs-hint{font-size:10px;color:var(--g4);margin-bottom:6px;font-style:italic}
+
+/* info box (Alt 10) */
+.info-box{background:var(--ab-pale);border:0.5px solid #c5dff0;border-left:3px solid var(--ab);border-radius:8px;padding:10px 13px;font-size:12px;color:var(--ab-dk);line-height:1.6}
+
+/* review banner */
+.review-banner{background:var(--green-lt);border:0.5px solid #81c784;border-radius:8px;padding:10px 13px;font-size:12px;color:var(--green);display:flex;align-items:flex-start;gap:8px;margin-bottom:12px;line-height:1.5}
+
+/* nav */
+.nav-wrap{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--g2);padding:10px 1rem;display:flex;gap:8px;justify-content:center;z-index:200}
+.btn-nav{font-family:'Barlow',sans-serif;font-size:13px;font-weight:600;padding:10px 24px;border-radius:8px;border:none;cursor:pointer;transition:all .15s}
+.btn-prev{background:white;border:0.5px solid var(--g2);color:var(--g6)}
+.btn-prev:hover{background:var(--g1)}
+.btn-next{background:var(--ab);color:white}.btn-next:hover{background:var(--ab-dk)}
+.btn-sub{background:var(--green);color:white}.btn-sub:hover{background:#145214}
+
+/* completion */
+.completion{text-align:center;padding:2.5rem 1.5rem;background:white;border-radius:var(--radius);border:0.5px solid var(--g2);margin-top:1.5rem}
+.completion-icon{font-size:44px;margin-bottom:1rem}
+.completion h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:26px;color:var(--ab);margin-bottom:8px}
+.completion p{font-size:13px;color:var(--g6);line-height:1.7;max-width:420px;margin:0 auto}
+
+@media(max-width:520px){
+  .areas-check-grid,.check-group-2{grid-template-columns:1fr}
+  .gestor-row{grid-template-columns:1fr auto}
+  .gestor-row select{grid-column:1/-1}
+}
+</style>
+</head>
+<body>
+
+<form id="mainForm" action="https://api.sheetmonkey.io/form/2ajWD9MrSMH2e9sEjSpZ7L" method="POST">
+<div class="progress-bar-wrap">
+  <span class="progress-label" id="progLabel">Bloco 1 de 6</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span class="progress-pct" id="progressPct">0%</span>
+</div>
+
+<div class="wrap">
+
+<!-- ══════════════════════════════════════════
+     PAGE 0 — IDENTIFICAÇÃO
+══════════════════════════════════════════ -->
+<div class="page active" id="page-0">
+
+  <div style="text-align:center;padding:2rem 0 1rem">
+    <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ab);margin-bottom:8px">ABSOLUT Sport · Projeto Flamengo</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:30px;color:var(--g8);line-height:1.1;margin-bottom:10px">Questionário<br>Operacional</div>
+    <div style="font-size:13px;color:var(--g6);max-width:480px;margin:0 auto;line-height:1.7">Cada tarefa que você descrever vai ganhar um <strong style="color:var(--g8)">código único</strong> no sistema de automação. Suas respostas definem como o planejamento de cada jogo é gerado automaticamente.</div>
+  </div>
+
+  <div class="intro-card">
+    <h2>Antes de começar</h2>
+    <p>Você pode navegar entre os blocos sem perder suas respostas. Ao final, revise tudo antes de enviar.</p>
+    <p><strong>Tempo estimado:</strong> 25–40 minutos.</p>
+  </div>
+
+  <!-- ID-01 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">ID-01</span> <span class="q-req">*</span></div>
+      <div class="q-label">Qual é o seu nome completo e em qual(is) área(s) você atua?</div>
+      <div class="q-hint">Se você atua em mais de uma área, marque todas que se aplicam.</div>
+    </div>
+    <div class="q-body">
+      <input type="text" id="q-name" name="Nome_Completo" placeholder="Nome completo" style="margin-bottom:12px">
+      <div class="q-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g6);margin-bottom:8px">Área(s) de atuação</div>
+      <div class="areas-check-grid" id="areasGrid">
+        <label class="check-item"><input type="checkbox" name="Area_Operação" value="Operação"> <label><strong>Operação</strong><span>Logística física e transfer</span></label></label>
+        <label class="check-item"><input type="checkbox" name="Area_Ticketing" value="Ticketing"> <label><strong>Ticketing</strong><span>Inventário e emissão de ingressos</span></label></label>
+        <label class="check-item"><input type="checkbox" name="Area_Procurement_e_Sourcing" value="Procurement & Sourcing"> <label><strong>Procurement & Sourcing</strong><span>Compras e fornecedores</span></label></label>
+        <label class="check-item"><input type="checkbox" name="Area_Planejamento" value="Planejamento"> <label><strong>Planejamento</strong><span>Estratégia e calendário</span></label></label>
+        <label class="check-item"><input type="checkbox" name="Area_Redação" value="Redação"> <label><strong>Redação</strong><span>Copy e comunicações</span></label></label>
+        <label class="check-item"><input type="checkbox" name="Area_Design" value="Design"> <label><strong>Design</strong><span>Artes e materiais visuais</span></label></label>
+        <label class="check-item"><input type="checkbox" name="Area_Tráfego_Digital" value="Tráfego Digital"> <label><strong>Tráfego Digital</strong><span>Mídia paga e captação</span></label></label>
+        <label class="check-item"><input type="checkbox" name="Area_E-commerce" value="E-commerce"> <label><strong>E-commerce</strong><span>Site e checkout</span></label></label>
+        <label class="check-item"><input type="checkbox" name="Area_Tecnologia" value="Tecnologia"> <label><strong>Tecnologia</strong><span>Automações e integrações</span></label></label>
+        <label class="check-item"><input type="checkbox" name="Area_Comercial_Vendedores" value="Comercial Vendedores"> <label><strong>Comercial Vendedores</strong><span>Hunters B2B/B2C</span></label></label>
+        <label class="check-item"><input type="checkbox" name="Area_Customer_Success" value="Customer Success"> <label><strong>Customer Success</strong><span>Atendimento pós-venda</span></label></label>
+        <label class="check-item"><input type="checkbox" name="Area_Product_Management" value="Product Management"> <label><strong>Product Management</strong><span>Precificação e pacotes</span></label></label>
+        <label class="check-item"><input type="checkbox" name="Area_Financeiro" value="Financeiro"> <label><strong>Financeiro</strong><span>Caixa e aprovações</span></label></label>
+      </div>
+
+      <div style="margin-top:14px">
+        <div class="q-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--g6);margin-bottom:8px">Seu(s) gestor(es)</div>
+        <div class="gestores-wrap" id="gestoresWrap">
+          <div class="gestor-row" id="gestor-0">
+            <input type="text" placeholder="Nome do gestor" style="font-size:12px">
+            <select style="font-size:12px">
+              <option value="">Tipo...</option>
+              <option>Gestor direto</option>
+              <option>Gestor do meu gestor</option>
+            </select>
+            <button class="btn-rm" onclick="removeGestor(0)">×</button>
+          </div>
+        </div>
+        <button class="btn-add-gestor" onclick="addGestor()">+ Adicionar gestor</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ID-02 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">ID-02</span></div>
+      <div class="q-label">Qual é o seu cargo atual na ABSOLUT Sport?</div>
+    </div>
+    <div class="q-body">
+      <input type="text" name="Cargo" placeholder="Ex: Coordenador de Operações, Analista de CS...">
+    </div>
+  </div>
+
+  <!-- ID-03 — Alt 2: remove "Mais de 2 anos", add "Menos de 3 meses" -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">ID-03</span></div>
+      <div class="q-label">Há quanto tempo você trabalha no Projeto Flamengo?</div>
+    </div>
+    <div class="q-body">
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="Tempo_no_Projeto" value="Menos de 3 meses"> <label>Menos de 3 meses</label></label>
+        <label class="radio-item"><input type="radio" name="Tempo_no_Projeto" value="Entre 3 e 6 meses"> <label>Entre 3 e 6 meses</label></label>
+        <label class="radio-item"><input type="radio" name="Tempo_no_Projeto" value="Entre 6 meses e 1 ano"> <label>Entre 6 meses e 1 ano</label></label>
+        <label class="radio-item"><input type="radio" name="Tempo_no_Projeto" value="Mais de 1 ano"> <label>Mais de 1 ano</label></label>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-0 -->
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 1 — TAREFAS
+     Alt 3: coluna de área por tarefa
+     Alt 5: coluna de substituto (absorve R-05)
+══════════════════════════════════════════ -->
+<div class="page" id="page-1">
+  <div class="area-hero">
+    <div class="area-hero-icon">📋</div>
+    <div>
+      <div class="area-hero-title">Bloco 1 — Mapeamento de Tarefas</div>
+      <div class="area-hero-sub">Cada tarefa ganha um código único no sistema de automação</div>
+    </div>
+  </div>
+
+  <!-- T-01 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">T-01</span> <span class="q-req">*</span></div>
+      <div class="q-label">Liste todas as tarefas que você realiza no ciclo de um jogo do Flamengo.</div>
+      <div class="q-hint">Seja o mais específico possível. Pense em cada ação concreta: o que você abre, envia, verifica, aprova, aciona. Se a mesma tarefa acontece em momentos diferentes (ex: D-7 e D-1), liste separado. Se você atua em mais de uma área, indique a área de cada tarefa na coluna "Área". No campo "Substituto", indique quem te cobre quando você estiver ausente.</div>
+      <div class="q-example">
+        <strong>💡 Exemplos de como descrever uma tarefa:</strong>
+        <ul>
+          <li>Confirmar inventário de ingressos no sistema do Flamengo e atualizar o Saleslog</li>
+          <li>Enviar PDF de instruções de biometria para lista de clientes via WhatsApp</li>
+          <li>Ligar para a empresa de transfer e confirmar número de vans e horário</li>
+          <li>Separar os ingressos por cliente em envelopes identificados antes do embarque</li>
+        </ul>
+      </div>
+    </div>
+    <div class="q-body">
+      <div style="overflow-x:auto">
+        <table class="task-table" id="taskTable">
+          <thead>
+            <tr>
+              <th style="width:80px">Código</th>
+              <th>Descrição da tarefa</th>
+              <th style="width:110px">Área</th>
+              <th style="width:110px">Prazo (antes do MD)</th>
+              <th style="width:100px">Tempo execução</th>
+              <th style="width:130px">Substituto em caso de ausência</th>
+              <th style="width:30px"></th>
+            </tr>
+          </thead>
+          <tbody id="taskBody"></tbody>
+        </table>
+      </div>
+      <button class="btn-add-task" onclick="addTaskRow()">+ Adicionar tarefa</button>
+    </div>
+  </div>
+
+  <!-- T-02 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">T-02</span></div>
+      <div class="q-label">Existe alguma tarefa que você faz apenas em <strong>jogos especiais</strong>?</div>
+      <div class="q-hint">Ex: Libertadores, clássicos, jogos noturnos em dia de semana, jogos com grande público corporativo.</div>
+      <div class="q-example">
+        <strong>💡 Exemplos:</strong>
+        <ul>
+          <li>Libertadores: verificar sinalização bilíngue (PT/ES) no Meeting Point</li>
+          <li>Clássicos: reforçar equipe de staff e confirmar freelancers extras</li>
+          <li>Jogos noturnos: planejar transfer de retorno para ~meia-noite</li>
+        </ul>
+      </div>
+    </div>
+    <div class="q-body"><textarea name="T02_Tarefas_Jogos_Especiais" placeholder="Descreva tarefas específicas por tipo de jogo..."></textarea></div>
+  </div>
+
+  <!-- T-03 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">T-03</span></div>
+      <div class="q-label">Existe alguma tarefa que você faz <strong>depois do jogo</strong> (pós-MD)?</div>
+      <div class="q-hint">Relatórios, registros, devoluções, pesquisas de satisfação, prestações de conta.</div>
+    </div>
+    <div class="q-body"><textarea name="T03_Tarefas_Pos_MD" placeholder="Ex: Consolidar relatório de presença, registrar custos reais, enviar NPS..."></textarea></div>
+  </div>
+
+  <!-- T-04 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">T-04</span></div>
+      <div class="q-label">Existe alguma tarefa que você faz apenas <strong>uma vez por temporada</strong>?</div>
+      <div class="q-hint">Contratos anuais, configurações de ferramentas, treinamentos de equipe.</div>
+    </div>
+    <div class="q-body"><textarea name="T04_Tarefas_Sazonais" placeholder="Ex: Renovar contrato com empresa de transfer, calibrar integração Botmaker..."></textarea></div>
+  </div>
+
+</div><!-- /page-1 -->
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 2 — TIMING
+══════════════════════════════════════════ -->
+<div class="page" id="page-2">
+  <div class="area-hero">
+    <div class="area-hero-icon">⏱️</div>
+    <div>
+      <div class="area-hero-title">Bloco 2 — Timing das Tarefas</div>
+      <div class="area-hero-sub">Prazos, urgências e restrições de horário</div>
+    </div>
+  </div>
+
+  <div class="timing-note">
+    <strong>Referência:</strong> MD = Match Day (dia do jogo) · D-7 = 7 dias antes · D-1 = véspera · MD-2h = 2h antes do kickoff · D+1 = dia seguinte
+  </div>
+
+  <!-- TM-01 — Alt 9: puxa tarefas do T-01 dinamicamente -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">TM-01</span> <span class="q-req">*</span></div>
+      <div class="q-label">Qual tarefa sua, se atrasada, mais prejudica as outras áreas?</div>
+      <div class="q-hint">Selecione a tarefa principal abaixo e explique o impacto do atraso nas outras áreas. (As tarefas aparecem conforme você as preenche no Bloco 1.)</div>
+    </div>
+    <div class="q-body">
+      <div class="task-refs-hint" id="tmHint">Preencha as tarefas no Bloco 1 para que elas apareçam aqui como referência.</div>
+      <div class="task-refs" id="taskRefsPills"></div>
+      <textarea name="TM01_Gargalo_Critico" placeholder="Explique por que essa tarefa é o gargalo crítico e quais áreas são impactadas se ela atrasar..."></textarea>
+    </div>
+  </div>
+
+  <!-- TM-02 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">TM-02</span></div>
+      <div class="q-label">Existe alguma tarefa que depende de um <strong>horário específico do dia</strong>?</div>
+      <div class="q-hint">Ex: Só consigo acionar o fornecedor até as 17h. O sistema do Flamengo atualiza às 9h.</div>
+    </div>
+    <div class="q-body"><textarea name="TM02_Restricoes_Horario" placeholder="Descreva restrições de horário que impactam a execução das suas tarefas..."></textarea></div>
+  </div>
+
+  <!-- TM-03 — Alt 8: CC-02 removida; CC-01 mantida aqui como TM-03 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">TM-03</span></div>
+      <div class="q-label">Qual é a sua capacidade em semanas de múltiplos jogos?</div>
+      <div class="q-hint">O Flamengo pode ter 3 jogos em 10 dias (Libertadores + Brasileirão + Copa do Brasil).</div>
+    </div>
+    <div class="q-body">
+      <div class="radio-group">
+        <label class="radio-item"><input type="radio" name="TM03_Capacidade_Volume" value="Sem limite"> <label>Consigo operar qualquer volume sem problema</label></label>
+        <label class="radio-item"><input type="radio" name="TM03_Capacidade_Volume" value="Até 2 jogos em 10 dias"> <label>Até 2 jogos em 10 dias sem dificuldade</label></label>
+        <label class="radio-item"><input type="radio" name="TM03_Capacidade_Volume" value="3 jogos em 10 dias"> <label>3 jogos em 10 dias já começo a sentir</label></label>
+        <label class="radio-item"><input type="radio" name="TM03_Capacidade_Volume" value="Crítico acima de 2"> <label>Mais de 2 jogos seguidos já é crítico para minha área</label></label>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-2 -->
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 3 — RELAÇÕES
+     Alt 4: escala 1-5 + 2 novas perguntas (Flamengo e cliente)
+     Alt 5: R-05 removida (fundida com T-01)
+══════════════════════════════════════════ -->
+<div class="page" id="page-3">
+  <div class="area-hero">
+    <div class="area-hero-icon">🔗</div>
+    <div>
+      <div class="area-hero-title">Bloco 3 — Relações Inter-Áreas</div>
+      <div class="area-hero-sub">De quem você depende? Quem depende de você?</div>
+    </div>
+  </div>
+
+  <!-- R-01: escala de grau por área -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">R-01</span> <span class="q-req">*</span></div>
+      <div class="q-label">Qual é o grau de relacionamento da sua área com cada uma das outras áreas no ciclo de um jogo?</div>
+      <div class="q-hint">Clique para selecionar o nível de cada área. 1 = Não me relaciono · 5 = Relação extremamente próxima.</div>
+    </div>
+    <div class="q-body">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+        <span style="font-size:10px;font-weight:600;color:var(--g4)">1 — Não me relaciono</span>
+        <span style="font-size:10px;color:var(--g4)">·</span>
+        <span style="font-size:10px;font-weight:600;color:var(--g4)">3 — Relacionamento médio</span>
+        <span style="font-size:10px;color:var(--g4)">·</span>
+        <span style="font-size:10px;font-weight:600;color:var(--ab)">5 — Relação extremamente próxima</span>
+      </div>
+      <div id="relAreasBlock"></div>
+    </div>
+  </div>
+
+  <!-- R-02 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">R-02</span> <span class="q-req">*</span></div>
+      <div class="q-label">O que você precisa <strong>RECEBER</strong> de outras áreas para executar suas tarefas?</div>
+      <div class="q-hint">Seja específico: o que é entregue, por quem e em qual prazo você precisa.</div>
+      <div class="q-example">
+        <strong>💡 Exemplos:</strong>
+        <ul>
+          <li>Recebo do <strong>Product Management</strong> a grade de preços → preciso até D-10</li>
+          <li>Recebo do <strong>Design</strong> os banners do jogo → preciso até D-5</li>
+          <li>Recebo do <strong>Comercial</strong> a lista de clientes → preciso até D-3</li>
+        </ul>
+      </div>
+    </div>
+    <div class="q-body"><textarea name="R02_Inputs_Recebidos" style="min-height:100px" placeholder="Liste o que você precisa receber, de quem e até quando..."></textarea></div>
+  </div>
+
+  <!-- R-03 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">R-03</span> <span class="q-req">*</span></div>
+      <div class="q-label">O que você <strong>ENTREGA</strong> para outras áreas como resultado do seu trabalho?</div>
+      <div class="q-hint">O que sai da sua mão e alimenta outros. O que é entregue, para quem e em qual prazo.</div>
+      <div class="q-example">
+        <strong>💡 Exemplos:</strong>
+        <ul>
+          <li>Entrego ao <strong>CS</strong> a lista com ingressos confirmados → D-5</li>
+          <li>Entrego ao <strong>E-commerce</strong> as cotas de estoque por setor → D-10</li>
+          <li>Entrego ao <strong>Financeiro</strong> os custos reais → D+2</li>
+        </ul>
+      </div>
+    </div>
+    <div class="q-body"><textarea name="R03_Outputs_Entregues" style="min-height:100px" placeholder="Liste o que você entrega, para quem e até quando..."></textarea></div>
+  </div>
+
+  <!-- R-04 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">R-04</span></div>
+      <div class="q-label">Já aconteceu de você ficar <strong>travado esperando algo de outra área</strong>?</div>
+      <div class="q-hint">Queremos mapear gargalos reais — situações que já aconteceram e impactaram a operação.</div>
+    </div>
+    <div class="q-body"><textarea name="R04_Gargalos_Reais" placeholder="Ex: Fiquei sem abrir o e-commerce porque a precificação chegou tarde demais..."></textarea></div>
+  </div>
+
+  <!-- R-05 NEW — Alt 4: relacionamento com Flamengo -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">R-05</span></div>
+      <div class="q-label">Você se relaciona diretamente com pessoas do <strong>Clube de Regatas do Flamengo</strong> com ligação ao projeto?</div>
+      <div class="q-hint">Ex: área de hospitalidade, credenciamento, bilheteria, operações de estádio, parceiros institucionais.</div>
+    </div>
+    <div class="q-body">
+      <div class="radio-group" style="margin-bottom:10px">
+        <label class="radio-item"><input type="radio" name="R05_Relacionamento_Flamengo" value="Sim" onclick="toggleFlaDetail(true)"> <label>Sim, tenho contato direto com o Flamengo</label></label>
+        <label class="radio-item"><input type="radio" name="R05_Relacionamento_Flamengo" value="Não" onclick="toggleFlaDetail(false)"> <label>Não tenho contato direto com o Flamengo</label></label>
+      </div>
+      <div id="flaDetail" style="display:none">
+        <textarea name="R05_Flamengo_Detalhe" placeholder="Com quem você fala no Flamengo? Sobre o quê? Com que frequência? Antes ou durante os jogos?"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- R-06 NEW — Alt 4: relacionamento com cliente -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">R-06</span></div>
+      <div class="q-label">Você se relaciona diretamente com <strong>clientes</strong> da ABSOLUT Sport?</div>
+      <div class="q-hint">Seja no processo de venda, no atendimento pré-jogo, na operação no dia do jogo ou no pós-venda.</div>
+    </div>
+    <div class="q-body">
+      <div class="radio-group" style="margin-bottom:10px">
+        <label class="radio-item"><input type="radio" name="R06_Relacionamento_Cliente" value="Sim" onclick="toggleCliDetail(true)"> <label>Sim, tenho contato direto com clientes</label></label>
+        <label class="radio-item"><input type="radio" name="R06_Relacionamento_Cliente" value="Não" onclick="toggleCliDetail(false)"> <label>Não tenho contato direto com clientes</label></label>
+      </div>
+      <div id="cliDetail" style="display:none">
+        <div class="check-group-2" style="margin-bottom:10px">
+          <label class="check-item"><input type="checkbox"> <label><strong>Processo de venda</strong><span>Prospecção e fechamento</span></label></label>
+          <label class="check-item"><input type="checkbox"> <label><strong>Atendimento pré-jogo</strong><span>Instruções, biometria, dúvidas</span></label></label>
+          <label class="check-item"><input type="checkbox"> <label><strong>Operação no dia do jogo</strong><span>Meeting Point, embarque, estádio</span></label></label>
+          <label class="check-item"><input type="checkbox"> <label><strong>Pós-venda / Fidelização</strong><span>NPS, recompra, relacionamento</span></label></label>
+        </div>
+        <textarea name="R06_Cliente_Detalhe" placeholder="Descreva como é esse relacionamento e em que momentos do ciclo ele acontece..."></textarea>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-3 -->
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 4 — FERRAMENTAS E RISCOS
+     Alt 6: Figma + IAs
+     Alt 7: grid 2 colunas
+     Alt 8: CC-02 removida
+══════════════════════════════════════════ -->
+<div class="page" id="page-4">
+  <div class="area-hero">
+    <div class="area-hero-icon">🛠️</div>
+    <div>
+      <div class="area-hero-title">Bloco 4 — Ferramentas, Riscos e Pontos Cegos</div>
+      <div class="area-hero-sub">Sistemas que você usa, o que pode dar errado e o que só você sabe</div>
+    </div>
+  </div>
+
+  <!-- F-01 — Alt 6 + Alt 7 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">F-01</span> <span class="q-req">*</span></div>
+      <div class="q-label">Quais ferramentas e sistemas você usa no dia a dia operacional?</div>
+      <div class="q-hint">Marque todas que usa e descreva para quê em caso de dúvida.</div>
+    </div>
+    <div class="q-body">
+      <div class="check-group-2">
+        <label class="check-item"><input type="checkbox" name="F01_Saleslog" value="Saleslog (planilha)"> <label><strong>Saleslog (planilha)</strong><span>Controle de inventário e clientes</span></label></label>
+        <label class="check-item"><input type="checkbox" name="F01_Botmaker" value="Botmaker"> <label><strong>Botmaker</strong><span>Automação de WhatsApp</span></label></label>
+        <label class="check-item"><input type="checkbox" name="F01_Pipedrive" value="Pipedrive"> <label><strong>Pipedrive</strong><span>CRM de vendas e pipeline</span></label></label>
+        <label class="check-item"><input type="checkbox" name="F01_Shopify" value="Shopify / E-commerce"> <label><strong>Shopify / E-commerce</strong><span>Plataforma de vendas online</span></label></label>
+        <label class="check-item"><input type="checkbox" name="F01_Sistema_Flamengo" value="Sistema do Flamengo"> <label><strong>Sistema do Flamengo</strong><span>Inventário e emissão de ingressos</span></label></label>
+        <label class="check-item"><input type="checkbox" name="F01_WhatsApp" value="WhatsApp / Grupos"> <label><strong>WhatsApp / Grupos</strong><span>Comunicação de equipe e clientes</span></label></label>
+        <label class="check-item"><input type="checkbox" name="F01_Google_Drive" value="Google Drive / Sheets"> <label><strong>Google Drive / Sheets</strong><span>Documentos e planilhas</span></label></label>
+        <label class="check-item"><input type="checkbox" name="F01_Meta_Google_Ads" value="Meta Ads / Google Ads"> <label><strong>Meta Ads / Google Ads</strong><span>Campanhas de mídia paga</span></label></label>
+        <label class="check-item"><input type="checkbox" name="F01_Make_Zapier" value="Make / Zapier"> <label><strong>Make / Zapier</strong><span>Automações de processos</span></label></label>
+        <label class="check-item"><input type="checkbox" name="F01_Bepass" value="Biometria Facial (Bepass)"> <label><strong>Biometria Facial (Bepass)</strong><span>Cadastro e acesso ao estádio</span></label></label>
+        <label class="check-item"><input type="checkbox" name="F01_Figma" value="Figma"> <label><strong>Figma</strong><span>Design de interfaces e peças</span></label></label>
+        <label class="check-item"><input type="checkbox" name="F01_Illustrator_Photoshop" value="Illustrator / Photoshop"> <label><strong>Illustrator / Photoshop</strong><span>Produção gráfica</span></label></label>
+        <label class="check-item"><input type="checkbox" name="F01_ChatGPT_Gemini" value="ChatGPT / Gemini (IA)"> <label><strong>ChatGPT / Gemini (IA)</strong><span>Assistência com textos e tarefas</span></label></label>
+        <label class="check-item"><input type="checkbox" name="F01_Claude_IA" value="Claude (IA)"> <label><strong>Claude (IA)</strong><span>Planejamento e automação</span></label></label>
+      </div>
+      <textarea style="margin-top:8px;min-height:48px" name="F01_Outras_Ferramentas" placeholder="Outras ferramentas não listadas acima..."></textarea>
+    </div>
+  </div>
+
+  <!-- F-02 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">F-02</span></div>
+      <div class="q-label">Alguma ferramenta te causa <strong>dificuldade ou gargalo</strong> hoje?</div>
+      <div class="q-hint">Lentidão, falta de acesso, integração quebrada, informação copiada manualmente.</div>
+    </div>
+    <div class="q-body"><textarea name="F02_Dificuldades_Ferramentas" placeholder="Ex: Preciso copiar manualmente a lista do Saleslog toda vez. O sistema do Flamengo só atualiza em horários específicos..."></textarea></div>
+  </div>
+
+  <!-- F-03 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">F-03</span></div>
+      <div class="q-label">Existe alguma informação crítica que hoje <strong>vive só na sua cabeça</strong>?</div>
+      <div class="q-hint">Contatos de fornecedores, procedimentos não escritos, regras informais, janelas de sistemas.</div>
+    </div>
+    <div class="q-body"><textarea name="F03_Conhecimento_Nao_Documentado" placeholder="Ex: Sei que o fornecedor X só pode ser acionado com 10 dias de antecedência. Tenho o contato direto do responsável de ingressos no Flamengo..."></textarea></div>
+  </div>
+
+  <!-- RPC-01 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">RPC-01</span></div>
+      <div class="q-label">Qual o <strong>pior cenário</strong> que já aconteceu (ou que poderia acontecer) na sua área em dia de jogo?</div>
+    </div>
+    <div class="q-body"><textarea name="RPC01_Pior_Cenario" placeholder="Ex: Cliente chegou sem biometria e ficou na porta. Van não apareceu. Ingresso emitido para setor errado..."></textarea></div>
+  </div>
+
+  <!-- RPC-02 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">RPC-02</span></div>
+      <div class="q-label">Se você pudesse <strong>mudar uma coisa</strong> no processo atual da sua área, o que seria?</div>
+    </div>
+    <div class="q-body"><textarea name="RPC02_Mudanca_Processo" placeholder="Ex: Queria receber automaticamente a lista do Saleslog toda vez que uma venda é feita, sem precisar perguntar..."></textarea></div>
+  </div>
+
+  <!-- RPC-03 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">RPC-03</span></div>
+      <div class="q-label">Há algo sobre como sua área funciona que <strong>outras áreas não sabem — e deveriam?</strong></div>
+    </div>
+    <div class="q-body"><textarea name="RPC03_Pontos_Cegos" placeholder="Ex: O sistema do Flamengo tem uma janela de emissão que muita gente não sabe. O Botmaker tem limite de disparos simultâneos..."></textarea></div>
+  </div>
+
+</div><!-- /page-4 -->
+
+
+<!-- ══════════════════════════════════════════
+     PAGE 5 — ENCERRAMENTO
+     Alt 10: disponibilidade vira texto informativo
+     Geral: aviso de revisão de respostas
+══════════════════════════════════════════ -->
+<div class="page" id="page-5">
+  <div class="area-hero" style="background:linear-gradient(135deg,var(--ab) 0%,var(--ab-dk) 100%)">
+    <div class="area-hero-icon">✅</div>
+    <div>
+      <div class="area-hero-title">Bloco 5 — Encerramento</div>
+      <div class="area-hero-sub">Últimas perguntas antes de finalizar</div>
+    </div>
+  </div>
+
+  <!-- Review banner — Comentário geral -->
+  <div class="review-banner">
+    <span style="font-size:16px;flex-shrink:0">💡</span>
+    <span><strong>Revise suas respostas.</strong> Você pode voltar aos blocos anteriores usando o botão "Anterior" — suas respostas já dadas não serão apagadas. Quando estiver satisfeito, clique em "Enviar respostas".</span>
+  </div>
+
+  <!-- ENC-01 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">ENC-01</span></div>
+      <div class="q-label">Tem algo importante sobre a sua área que não foi perguntado — e você acha que deveria estar aqui?</div>
+    </div>
+    <div class="q-body"><textarea name="ENC01_Observacoes_Livres" placeholder="Espaço livre para qualquer informação relevante não coberta..."></textarea></div>
+  </div>
+
+  <!-- ENC-02 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">ENC-02</span></div>
+      <div class="q-label">Em uma frase: qual é o <strong>maior desafio</strong> da sua área hoje no Projeto Flamengo?</div>
+    </div>
+    <div class="q-body">
+      <input type="text" name="ENC02_Maior_Desafio" placeholder="Ex: Falta de visibilidade antecipada sobre o número real de clientes confirmados...">
+    </div>
+  </div>
+
+  <!-- ENC-03 -->
+  <div class="q-card">
+    <div class="q-header">
+      <div class="q-code"><span class="q-code-badge">ENC-03</span></div>
+      <div class="q-label">Seu e-mail para receber o sumário das respostas</div>
+    </div>
+    <div class="q-body">
+      <input type="email" name="ENC03_Email" placeholder="seu@email.com">
+    </div>
+  </div>
+
+  <!-- Alt 10: sem opções de radio, só texto informativo -->
+  <div class="q-card" style="border-left:4px solid var(--ab-lt)">
+    <div class="q-header">
+      <div class="q-label" style="color:var(--ab)">Próximos passos</div>
+    </div>
+    <div class="q-body">
+      <div class="info-box">
+        Após o envio, pode ser necessário um bate-papo de 30 minutos para aprofundar algumas respostas. Caso isso seja necessário, entraremos em contato por WhatsApp ou e-mail para agendar.
+      </div>
+    </div>
+  </div>
+
+  <div class="completion" id="completionMsg" style="display:none">
+    <div class="completion-icon">🎯</div>
+    <h2>Respostas enviadas!</h2>
+    <p>Obrigado pela dedicação. Suas respostas alimentam diretamente o sistema de planejamento operacional da ABSOLUT Sport.<br><br>Você receberá um sumário no e-mail em breve.</p>
+  </div>
+
+</div><!-- /page-5 -->
+
+</div><!-- /wrap -->
+
+<!-- NAV -->
+<div class="nav-wrap" id="navWrap">
+  <button class="btn-nav btn-prev" id="btnPrev" onclick="prevPage()" style="display:none">← Anterior</button>
+  <button class="btn-nav btn-next" id="btnNext" onclick="nextPage()">Próximo →</button>
+</div>
+
+<script>
+const TOTAL_PAGES = 6;
+let currentPage = 0;
+let taskCounter = 0;
+let gestorCounter = 1;
+
+const AREAS = ["Operação","Ticketing","Procurement & Sourcing","Planejamento","Redação","Design",
+  "Tráfego Digital","E-commerce","Tecnologia","Comercial Vendedores","Customer Success","Product Management","Financeiro"];
+
+const PAGE_LABELS = ["Identificação","Tarefas","Timing","Relações","Ferramentas & Riscos","Encerramento"];
+
+const PRAZO_OPTS = ["D-14","D-12","D-10","D-7","D-5","D-3","D-2","D-1","MD manhã","MD-3h","MD-2h","D+1","D+2","D+3","Por temporada"];
+const TEMPO_OPTS = ["< 15 min","15–30 min","30–60 min","1–2 horas","2–4 horas","Meio dia","Dia inteiro","~2h (evento)","Monitoramento contínuo"];
+
+// ── GESTOR BUILDER ──────────────────────────────────────────────────────────
+function addGestor() {
+  const wrap = document.getElementById("gestoresWrap");
+  const idx = gestorCounter++;
+  const row = document.createElement("div");
+  row.className = "gestor-row";
+  row.id = `gestor-${idx}`;
+  row.innerHTML = `
+    <input type="text" placeholder="Nome do gestor" style="font-size:12px">
+    <select style="font-size:12px">
+      <option value="">Tipo...</option>
+      <option>Gestor direto</option>
+      <option>Gestor do meu gestor</option>
+    </select>
+    <button class="btn-rm" onclick="removeGestor(${idx})">×</button>`;
+  wrap.appendChild(row);
+}
+function removeGestor(idx) {
+  const el = document.getElementById(`gestor-${idx}`);
+  if (el) el.remove();
+}
+
+// ── TASK TABLE ──────────────────────────────────────────────────────────────
+function getAreaPrefix() {
+  const checked = document.querySelectorAll('input[name="area"]:checked');
+  if (checked.length === 0) return "XXX";
+  const map = {
+    "Operação":"Ops","Ticketing":"Tck","Procurement & Sourcing":"Prc","Planejamento":"Pln",
+    "Redação":"Red","Design":"Dsg","Tráfego Digital":"Trf","E-commerce":"Eco",
+    "Tecnologia":"Tec","Comercial Vendedores":"Com","Customer Success":"CSu",
+    "Product Management":"Pro","Financeiro":"Fin"
+  };
+  return map[checked[0].value] || "XXX";
+}
+
+function addTaskRow() {
+  const tbody = document.getElementById("taskBody");
+  taskCounter++;
+  const prefix = getAreaPrefix();
+  const code = `${prefix}${String(taskCounter).padStart(4,"0")}`;
+
+  const prazoOpts = PRAZO_OPTS.map(o=>`<option>${o}</option>`).join("");
+  const tempoOpts = TEMPO_OPTS.map(o=>`<option>${o}</option>`).join("");
+  const areaOpts = AREAS.map(a=>`<option>${a}</option>`).join("");
+
+  const tr = document.createElement("tr");
+  tr.id = `task-tr-${taskCounter}`;
+  tr.innerHTML = `
+    <td><span class="task-code-cell" id="tcode-${taskCounter}">${code}</span></td>
+    <td><textarea style="min-height:46px;font-size:11px;padding:4px 6px" placeholder="Descreva a tarefa..."></textarea></td>
+    <td><select style="font-size:11px;padding:4px 6px"><option value="">Área...</option>${areaOpts}</select></td>
+    <td><select style="font-size:11px;padding:4px 6px"><option value="">Prazo...</option>${prazoOpts}</select></td>
+    <td><select style="font-size:11px;padding:4px 6px"><option value="">Tempo...</option>${tempoOpts}</select></td>
+    <td><input type="text" placeholder="Nome do substituto" style="font-size:11px;padding:4px 6px"></td>
+    <td><button class="btn-rm" onclick="removeTaskRow(${taskCounter})" title="Remover">×</button></td>`;
+  tbody.appendChild(tr);
+  updateTaskRefPills();
+}
+
+function removeTaskRow(idx) {
+  const tr = document.getElementById(`task-tr-${idx}`);
+  if (tr) { tr.remove(); updateTaskRefPills(); }
+}
+
+// ── TASK REF PILLS (Alt 9) ──────────────────────────────────────────────────
+function updateTaskRefPills() {
+  const pills = document.getElementById("taskRefsPills");
+  const hint  = document.getElementById("tmHint");
+  const rows  = document.querySelectorAll("#taskBody tr");
+  pills.innerHTML = "";
+  if (rows.length === 0) {
+    hint.style.display = "block"; return;
+  }
+  hint.style.display = "none";
+  rows.forEach(tr => {
+    const codeEl = tr.querySelector(".task-code-cell");
+    const descEl = tr.querySelector("textarea");
+    if (!codeEl) return;
+    const code = codeEl.textContent.trim();
+    const desc = descEl ? descEl.value.trim().substring(0,40) : "";
+    const pill = document.createElement("span");
+    pill.className = "task-ref-pill";
+    pill.textContent = code + (desc ? " — " + desc + (desc.length >= 40 ? "…" : "") : "");
+    pill.onclick = () => pill.classList.toggle("selected");
+    pills.appendChild(pill);
+  });
+}
+
+// ── RELATION SCALE (Alt 4) ──────────────────────────────────────────────────
+function buildRelAreas() {
+  const container = document.getElementById("relAreasBlock");
+  const SCALE = [
+    {v:1, label:"1<br>Nenhuma"},
+    {v:2, label:"2<br>Baixa"},
+    {v:3, label:"3<br>Média"},
+    {v:4, label:"4<br>Alta"},
+    {v:5, label:"5<br>Próxima"},
+  ];
+  AREAS.forEach(area => {
+    const row = document.createElement("div");
+    row.className = "rel-area-row";
+    row.innerHTML = `<div class="rel-area-name">${area}</div><div class="rel-scale" id="scale-${area.replace(/\s+/g,'-')}">
+      ${SCALE.map(s=>`<button class="rel-scale-btn" data-area="${area}" data-val="${s.v}" onclick="setScale(this,${s.v})">${s.label}</button>`).join("")}
+    </div>`;
+    container.appendChild(row);
+  });
+}
+
+function setScale(btn, val) {
+  const area = btn.dataset.area;
+  const id = "scale-"+area.replace(/\s+/g,"-");
+  document.querySelectorAll(`#${id} .rel-scale-btn`).forEach(b => {
+    b.className = "rel-scale-btn";
+  });
+  btn.classList.add(`active-${val}`);
+}
+
+// ── TOGGLE DETAILS ──────────────────────────────────────────────────────────
+function toggleFlaDetail(show) { document.getElementById("flaDetail").style.display = show?"block":"none"; }
+function toggleCliDetail(show) { document.getElementById("cliDetail").style.display = show?"block":"none"; }
+
+// ── RADIO / CHECK INTERACTIVITY ──────────────────────────────────────────────
+document.addEventListener("change", function(e) {
+  if (e.target.type === "radio") {
+    const name = e.target.name;
+    document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+      r.closest(".radio-item")?.classList.toggle("sel", r.checked);
+    });
+  }
+  if (e.target.type === "checkbox") {
+    e.target.closest(".check-item")?.classList.toggle("sel", e.target.checked);
+  }
+  // Update task area prefix when area checkboxes change
+  if (e.target.name === "area") {
+    document.querySelectorAll("#taskBody tr").forEach((tr, i) => {
+      const codeEl = tr.querySelector(".task-code-cell");
+      if (codeEl) {
+        const num = codeEl.id.replace("tcode-","");
+        codeEl.textContent = `${getAreaPrefix()}${String(num).padStart(4,"0")}`;
+      }
+    });
+  }
+});
+
+// ── NAVIGATION ──────────────────────────────────────────────────────────────
+function updateProgress() {
+  const pct = Math.round((currentPage / (TOTAL_PAGES - 1)) * 100);
+  document.getElementById("progressFill").style.width = pct + "%";
+  document.getElementById("progressPct").textContent = pct + "%";
+  document.getElementById("progLabel").textContent = `Bloco ${currentPage + 1} de ${TOTAL_PAGES} — ${PAGE_LABELS[currentPage]}`;
+}
+
+function showPage(n) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(`page-${n}`).classList.add("active");
+  currentPage = n;
+  updateProgress();
+
+  document.getElementById("btnPrev").style.display = n === 0 ? "none" : "flex";
+  const btnNext = document.getElementById("btnNext");
+  if (n === TOTAL_PAGES - 1) {
+    btnNext.textContent = "Enviar respostas ✓";
+    btnNext.className = "btn-nav btn-sub";
+  } else {
+    btnNext.textContent = "Próximo →";
+    btnNext.className = "btn-nav btn-next";
+  }
+  // Sync task ref pills when entering timing page
+  if (n === 2) updateTaskRefPills();
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+
+function nextPage() {
+  if (currentPage === TOTAL_PAGES - 1) { submitForm(); return; }
+  showPage(currentPage + 1);
+}
+function prevPage() {
+  if (currentPage > 0) showPage(currentPage - 1);
+}
+function submitForm() {
+  // Show completion message first, then submit
+  document.getElementById("completionMsg").style.display = "block";
+  document.getElementById("navWrap").style.display = "none";
+  document.getElementById("completionMsg").scrollIntoView({behavior:"smooth"});
+  // Collect task table data into hidden fields before submit
+  collectTaskData();
+  // Submit form after short delay so user sees the confirmation
+  setTimeout(() => { document.getElementById("mainForm").submit(); }, 1200);
+}
+
+function collectTaskData() {
+  const rows = document.querySelectorAll("#taskBody tr");
+  let tasksText = "";
+  rows.forEach((tr, i) => {
+    const cells = tr.querySelectorAll("textarea, select, input[type=text]");
+    if (cells.length >= 5) {
+      const desc    = cells[0] ? cells[0].value.trim() : "";
+      const area    = cells[1] ? cells[1].value : "";
+      const prazo   = cells[2] ? cells[2].value : "";
+      const tempo   = cells[3] ? cells[3].value : "";
+      const subst   = cells[4] ? cells[4].value.trim() : "";
+      const codeEl  = tr.querySelector(".task-code-cell");
+      const code    = codeEl ? codeEl.textContent.trim() : "";
+      if (desc) tasksText += `[${code}] ${desc} | Área: ${area} | Prazo: ${prazo} | Tempo: ${tempo} | Substituto: ${subst}\n`;
+    }
+  });
+  let hidden = document.getElementById("hiddenTasks");
+  if (!hidden) {
+    hidden = document.createElement("input");
+    hidden.type = "hidden";
+    hidden.id = "hiddenTasks";
+    hidden.name = "T01_Tarefas_Principais";
+    document.getElementById("mainForm").appendChild(hidden);
+  }
+  hidden.value = tasksText;
+
+  // Collect gestor data
+  let gestoresText = "";
+  document.querySelectorAll(".gestor-row").forEach(row => {
+    const nome = row.querySelector("input") ? row.querySelector("input").value.trim() : "";
+    const tipo = row.querySelector("select") ? row.querySelector("select").value : "";
+    if (nome) gestoresText += `${nome} (${tipo}); `;
+  });
+  let hiddenGest = document.getElementById("hiddenGestores");
+  if (!hiddenGest) {
+    hiddenGest = document.createElement("input");
+    hiddenGest.type = "hidden";
+    hiddenGest.id = "hiddenGestores";
+    hiddenGest.name = "ID01_Gestores";
+    document.getElementById("mainForm").appendChild(hiddenGest);
+  }
+  hiddenGest.value = gestoresText;
+
+  // Collect area scale values
+  let scaleText = "";
+  document.querySelectorAll(".rel-scale").forEach(scaleDiv => {
+    const active = scaleDiv.querySelector("[class*=active-]");
+    if (active) {
+      const areaName = scaleDiv.id.replace("scale-","").replace(/-/g," ");
+      const val = active.dataset.val;
+      scaleText += `${areaName}:${val}; `;
+    }
+  });
+  let hiddenScale = document.getElementById("hiddenScale");
+  if (!hiddenScale) {
+    hiddenScale = document.createElement("input");
+    hiddenScale.type = "hidden";
+    hiddenScale.id = "hiddenScale";
+    hiddenScale.name = "R01_Grau_Relacionamento_Areas";
+    document.getElementById("mainForm").appendChild(hiddenScale);
+  }
+  hiddenScale.value = scaleText;
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+buildRelAreas();
+addTaskRow(); // start with one empty row
+updateProgress();
+</script>
+</form>
+</body>
+</html>
